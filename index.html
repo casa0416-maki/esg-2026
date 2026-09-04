@@ -60,6 +60,36 @@
     border-color:var(--forest-500);
     background-color:var(--forest-100);
   }
+  .schedule-table{
+    border-collapse:separate;
+    border-spacing:0;
+    width:100%;
+  }
+  .schedule-table th{
+    background:var(--forest-800);
+    color:#fff;
+    font-weight:600;
+    text-align:left;
+    padding:.6rem .9rem;
+    font-size:.82rem;
+  }
+  .schedule-table th:first-child{ border-top-left-radius:8px; }
+  .schedule-table th:last-child{ border-top-right-radius:8px; }
+  .schedule-table td{
+    padding:.55rem .9rem;
+    font-size:.82rem;
+    border-bottom:1px solid #e4dfd1;
+    color:var(--ink-900);
+  }
+  .schedule-table tr:last-child td{ border-bottom:none; }
+  .schedule-table tr:nth-child(even) td{ background:#faf8f2; }
+  .schedule-table td:first-child{
+    font-family:'Inter','Noto Sans TC',sans-serif;
+    font-variant-numeric:tabular-nums;
+    color:var(--forest-700);
+    font-weight:600;
+    white-space:nowrap;
+  }
   ::selection{ background:var(--forest-100); }
   @media (prefers-reduced-motion: reduce){
     *{ transition:none !important; animation:none !important; }
@@ -71,17 +101,50 @@
   <!-- Header -->
   <header class="border-b" style="border-color:#e4dfd1; background:linear-gradient(180deg,#f9f7f1 0%, var(--sand-50) 100%);">
     <div class="max-w-6xl mx-auto px-6 md:px-10 pt-14 pb-10">
-      <p class="text-sm tracking-wide" style="color:var(--forest-500);">四場區域巡迴 · 環境與人權雙軸課程</p>
-      <h1 class="mt-3 text-4xl md:text-5xl font-bold leading-tight" style="color:var(--forest-900);">
-        2026企業ESG雙軸實戰班
-      </h1>
-      <p class="mt-4 max-w-xl text-base leading-relaxed" style="color:var(--ink-500);">
-        攜手宜蘭、中央、中正、東華四校，結合環境（E）、人權（S）講座、企業實務案例與實作工作坊，協助在地企業與學員建立永續行動力。
-      </p>
-      <div class="mt-6 flex items-center gap-2 text-sm">
-        <span class="inline-block w-2 h-2 rounded-full" style="background:var(--tech-500);"></span>
-        <span style="color:var(--ink-500);">最後更新日期：</span>
-        <span class="num font-semibold" style="color:var(--forest-800);">2026/09/01</span>
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 items-start">
+
+        <!-- Left: title/intro -->
+        <div>
+          <p class="text-sm tracking-wide" style="color:var(--forest-500);">四場區域巡迴 · 環境與人權雙軸課程</p>
+          <h1 class="mt-3 text-4xl md:text-5xl font-bold leading-tight" style="color:var(--forest-900);">
+            2026企業ESG雙軸實戰班
+          </h1>
+          <p class="mt-4 max-w-xl text-base leading-relaxed" style="color:var(--ink-500);">
+            攜手宜蘭、中央、中正、東華四校，結合環境（E）、人權（S）講座、企業實務案例與實作工作坊，協助在地企業與學員建立永續行動力。
+          </p>
+          <div class="mt-6 flex items-center gap-2 text-sm">
+            <span class="inline-block w-2 h-2 rounded-full" style="background:var(--tech-500);"></span>
+            <span style="color:var(--ink-500);">最後更新日期：</span>
+            <span class="num font-semibold" style="color:var(--forest-800);">2026/09/01</span>
+          </div>
+        </div>
+
+        <!-- Right: schedule table -->
+        <div class="card-surface rounded-xl overflow-hidden shadow-sm">
+          <div class="px-4 pt-4 pb-2">
+            <p class="text-xs font-semibold tracking-wide" style="color:var(--forest-700);">當日課程時間表</p>
+          </div>
+          <div class="px-4 pb-4">
+            <table class="schedule-table rounded-lg overflow-hidden">
+              <thead>
+                <tr>
+                  <th>時段</th>
+                  <th>課程活動</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>09:30 - 10:00</td><td>報到與開場</td></tr>
+                <tr><td>10:00 - 11:00</td><td>主題講座｜環境面（E）議題與國際趨勢</td></tr>
+                <tr><td>11:00 - 12:00</td><td>主題講座｜社會面（S）議題與人權</td></tr>
+                <tr><td>12:00 - 13:30</td><td>午餐休息</td></tr>
+                <tr><td>13:30 - 14:30</td><td>在地企業經驗分享</td></tr>
+                <tr><td>14:30 - 16:30</td><td>實作工作坊</td></tr>
+                <tr><td>16:30 - 17:00</td><td>自由交流</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   </header>
@@ -106,7 +169,6 @@
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
   </a>
 </p>
-        </p>
 
         <div class="divider-line my-5"></div>
 
