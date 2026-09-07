@@ -92,8 +92,65 @@
     white-space:nowrap;
   }
   ::selection{ background:var(--forest-100); }
-  @media (prefers-reduced-motion: reduce){
-    *{ transition:none !important; animation:none !important; }
+
+  /* --- new: registered-count badge --- */
+  .count-badge{
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.3rem .6rem; border-radius:6px;
+    font-size:.78rem; font-weight:500;
+    background:var(--sand-100); border:1px solid #dcd8ca; color:var(--ink-500);
+  }
+  .count-badge input{
+    width:3.2rem; text-align:right; background:transparent; border:none; outline:none;
+    font-family:'Inter','Noto Sans TC',sans-serif; font-variant-numeric:tabular-nums;
+    font-weight:700; color:var(--forest-800);
+  }
+  .count-badge input:focus{ color:var(--tech-700); }
+
+  /* --- new: clickable card title --- */
+  .card-title-btn{
+    all:unset; cursor:pointer; display:inline-block;
+  }
+  .card-title-btn:hover h2{ text-decoration:underline; text-decoration-color:#c9c2ac; }
+  .card-title-btn:focus-visible h2{ outline:2px solid var(--tech-500); outline-offset:3px; border-radius:4px; }
+
+  /* --- new: notes modal --- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(18,39,31,.45);
+    display:none; align-items:center; justify-content:center; padding:1.25rem; z-index:50;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background:#fffefb; border-radius:12px; width:100%; max-width:520px;
+    box-shadow:0 20px 50px rgba(0,0,0,.25); overflow:hidden;
+  }
+  .modal-box header{
+    padding:1rem 1.25rem; background:var(--forest-800); color:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .modal-box textarea{
+    width:100%; min-height:180px; padding:.9rem; border:1px solid #dcd8ca; border-radius:8px;
+    font-family:inherit; font-size:.9rem; line-height:1.6; color:var(--ink-900); resize:vertical;
+    outline:none;
+  }
+  .modal-box textarea:focus{ border-color:var(--tech-500); }
+  .modal-save-status{ font-size:.78rem; color:var(--forest-500); min-height:1.1rem; }
+
+  /* --- new: image lightbox --- */
+  .lightbox-overlay{
+    position:fixed; inset:0; background:rgba(10,20,16,.85);
+    display:none; align-items:center; justify-content:center; padding:2rem; z-index:60;
+  }
+  .lightbox-overlay.open{ display:flex; }
+  .lightbox-inner{ max-width:90vw; max-height:85vh; text-align:center; }
+  .lightbox-inner img{
+    max-width:100%; max-height:75vh; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,.5);
+    background:#fffefb;
+  }
+  .lightbox-caption{ margin-top:.9rem; color:#f2efe4; font-size:.9rem; font-weight:500; }
+  .lightbox-close{
+    position:absolute; top:1.25rem; right:1.5rem; background:none; border:none;
+    color:#fff; font-size:1.6rem; line-height:1; cursor:pointer;
   }
 </style>
 </head>
@@ -111,10 +168,14 @@
           <p class="mt-4 max-w-xl text-base leading-relaxed" style="color:var(--ink-500);">
             攜手宜蘭、中央、中正、東華四校，結合環境（E）、人權（S）講座、企業實務案例與實作工作坊，協助在地企業與學員建立永續行動力。
           </p>
-          <div class="mt-6 flex items-center gap-2 text-sm">
+          <div class="mt-5 flex flex-wrap items-center gap-2">
+            <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--forest-700); color:#fff; text-decoration:none;">報名連結</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--tech-500); color:#fff; text-decoration:none;">廣宣情形</a>
+          </div>
+          <div class="mt-4 flex items-center gap-2 text-sm">
             <span class="inline-block w-2 h-2 rounded-full" style="background:var(--tech-500);"></span>
             <span style="color:var(--ink-500);">最後更新日期：</span>
-            <span class="num font-semibold" style="color:var(--forest-800);">2026/09/04</span>
+            <span class="num font-semibold" style="color:var(--forest-800);">2026/09/07</span>
           </div>
         </div>
 
@@ -157,18 +218,29 @@
       <article class="card-surface rounded-xl p-6 flex flex-col">
         <div class="flex items-start justify-between gap-4">
   <div>
-    <h2 class="text-2xl font-bold" style="color:var(--forest-900);">宜蘭場 ft.宜蘭大學</h2>
+    <button type="button" class="card-title-btn" onclick="openNoteModal('yilan','宜蘭場 ft.宜蘭大學')">
+      <h2 class="text-2xl font-bold" style="color:var(--forest-900);">宜蘭場 ft.宜蘭大學</h2>
+    </button>
     <p class="num mt-1 text-sm font-semibold" style="color:var(--tech-700);">2026/10/21（三）</p>
   </div>
-  <div class="flex items-center gap-2 shrink-0">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSf_1D6K9Enn0mjE3mkFSPST1HJQqqnAPfgXw0QfirX0O3v1og/viewform" target="_blank" rel="noopener noreferrer" class="badge shrink-0" style="background:var(--forest-700); color:#fff; text-decoration:none;">報名連結</a>
-    <a href="https://vos.tier.org.tw/seminar/SignupForm01.aspx?GUID=d55e16c0-3425-4662-b4bd-1d8c20b402d7" target="_blank" rel="noopener noreferrer" class="badge shrink-0" style="background:var(--tech-500); color:#fff; text-decoration:none;">台經院</a>
+  <div class="flex flex-col items-end gap-2 shrink-0">
+    <div class="flex items-center gap-2">
+      <a href="https://vos.tier.org.tw/seminar/SignupForm01.aspx?GUID=d55e16c0-3425-4662-b4bd-1d8c20b402d7" target="_blank" rel="noopener noreferrer" class="badge shrink-0" style="background:var(--tech-500); color:#fff; text-decoration:none;">台經院</a>
+    </div>
+    <div class="count-badge" data-count-id="yilan">
+      已報名人數：<input type="number" min="0" inputmode="numeric" value="0" onchange="saveCount('yilan', this.value)">
+    </div>
   </div>
 </div>
 <p class="mt-3 text-sm leading-relaxed">
   <a href="https://www.dropbox.com/scl/fo/pdfn9n5lu2ce9e9l0mbfj/ALVQBcPJI324IoQC-20WzwI?rlkey=skh8m26p6pb2t9wypad3gvjn6&dl=0" target="_blank" rel="noopener noreferrer" class="hover:underline transition inline-flex items-center gap-1 font-medium" style="color:var(--tech-500);">
     📍 奇麗灣珍奶文化館・海景山色景觀會議廳
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+  </a>
+</p>
+<p class="mt-2 text-sm">
+  <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--tech-100); color:var(--tech-700); text-decoration:none;">
+    📄 會議資料
   </a>
 </p>
 
@@ -198,13 +270,25 @@
       <article class="card-surface rounded-xl p-6 flex flex-col">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-bold" style="color:var(--forest-900);">桃園場 ft.中央大學</h2>
+            <button type="button" class="card-title-btn" onclick="openNoteModal('zhongyang','桃園場 ft.中央大學')">
+              <h2 class="text-2xl font-bold" style="color:var(--forest-900);">桃園場 ft.中央大學</h2>
+            </button>
             <p class="num mt-1 text-sm font-semibold" style="color:var(--tech-700);">2026/10/29（四）</p>
           </div>
-          <span class="badge status-pending shrink-0">尚未開始招生</span>
+          <div class="flex flex-col items-end gap-2 shrink-0">
+            <span class="badge status-pending shrink-0">尚未開始招生</span>
+            <div class="count-badge" data-count-id="zhongyang">
+              已報名人數：<input type="number" min="0" inputmode="numeric" value="0" onchange="saveCount('zhongyang', this.value)">
+            </div>
+          </div>
         </div>
         <p class="mt-3 text-sm leading-relaxed" style="color:var(--ink-500);">
           地點：<span class="badge status-tbd">確認中（待定）</span>
+        </p>
+        <p class="mt-2 text-sm">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--tech-100); color:var(--tech-700); text-decoration:none;">
+            📄 會議資料
+          </a>
         </p>
 
         <div class="divider-line my-5"></div>
@@ -212,11 +296,11 @@
         <dl class="space-y-3 text-sm">
           <div class="flex flex-wrap items-baseline gap-2">
             <span class="badge" style="background:var(--forest-100); color:var(--forest-700);"><span class="badge-dot" style="background:var(--forest-500);"></span>E 環境</span>
-            <span style="color:var(--ink-900);">曾于哲 會計師（安永會計師事務所）</span>
+            <span style="color:var(--ink-900);">林孟賢 會計師（安永會計師事務所）</span>
           </div>
           <div class="flex flex-wrap items-baseline gap-2">
             <span class="badge" style="background:var(--tech-100); color:var(--tech-700);"><span class="badge-dot" style="background:var(--tech-500);"></span>S 人權</span>
-            <span style="color:var(--ink-900);">蔡佳芸 副總經理（PwC 資誠）</span>
+            <span style="color:var(--ink-900);">莊于葶 副總經理（勤業眾信）</span>
           </div>
           <div class="flex flex-wrap items-baseline gap-2">
             <span class="badge" style="background:var(--amber-100); color:var(--amber-600);"><span class="badge-dot" style="background:var(--amber-600);"></span>企業案例</span>
@@ -233,13 +317,25 @@
       <article class="card-surface rounded-xl p-6 flex flex-col">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-bold" style="color:var(--forest-900);">嘉義場 ft.中正大學</h2>
+            <button type="button" class="card-title-btn" onclick="openNoteModal('zhongzheng','嘉義場 ft.中正大學')">
+              <h2 class="text-2xl font-bold" style="color:var(--forest-900);">嘉義場 ft.中正大學</h2>
+            </button>
             <p class="num mt-1 text-sm font-semibold" style="color:var(--tech-700);">2026/11/04（三）</p>
           </div>
-          <span class="badge status-pending shrink-0">尚未開始招生</span>
+          <div class="flex flex-col items-end gap-2 shrink-0">
+            <span class="badge status-pending shrink-0">尚未開始招生</span>
+            <div class="count-badge" data-count-id="zhongzheng">
+              已報名人數：<input type="number" min="0" inputmode="numeric" value="0" onchange="saveCount('zhongzheng', this.value)">
+            </div>
+          </div>
         </div>
         <p class="mt-3 text-sm leading-relaxed" style="color:var(--ink-500);">
           國立中正大學 201 教室
+        </p>
+        <p class="mt-2 text-sm">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--tech-100); color:var(--tech-700); text-decoration:none;">
+            📄 會議資料
+          </a>
         </p>
 
         <div class="divider-line my-5"></div>
@@ -268,13 +364,25 @@
       <article class="card-surface rounded-xl p-6 flex flex-col">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-bold" style="color:var(--forest-900);">花蓮場 ft.東華大學</h2>
+            <button type="button" class="card-title-btn" onclick="openNoteModal('donghwa','花蓮場 ft.東華大學')">
+              <h2 class="text-2xl font-bold" style="color:var(--forest-900);">花蓮場 ft.東華大學</h2>
+            </button>
             <p class="num mt-1 text-sm font-semibold" style="color:var(--tech-700);">2026/12/01（二）</p>
           </div>
-          <span class="badge status-pending shrink-0">尚未開始招生</span>
+          <div class="flex flex-col items-end gap-2 shrink-0">
+            <span class="badge status-pending shrink-0">尚未開始招生</span>
+            <div class="count-badge" data-count-id="donghwa">
+              已報名人數：<input type="number" min="0" inputmode="numeric" value="0" onchange="saveCount('donghwa', this.value)">
+            </div>
+          </div>
         </div>
         <p class="mt-3 text-sm leading-relaxed" style="color:var(--ink-500);">
           工業技術研究院 OMEGA ZONE（美崙工業區內）
+        </p>
+        <p class="mt-2 text-sm">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--tech-100); color:var(--tech-700); text-decoration:none;">
+            📄 會議資料
+          </a>
         </p>
 
         <div class="divider-line my-5"></div>
@@ -350,6 +458,26 @@
           </div>
         </a>
 
+        <button type="button" onclick="openLightbox('nametag.png','名牌')" class="resource-btn rounded-lg p-5 flex flex-col gap-3 border text-left" style="border-color:#3a5346; background:#173226;">
+          <span class="w-9 h-9 rounded-md flex items-center justify-center" style="background:#a8632f;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="9" cy="13" r="2"/><path d="M14 11h4M14 15h4"/><path d="M9 3v4"/></svg>
+          </span>
+          <div>
+            <p class="text-white font-medium text-sm">名牌</p>
+            <p class="text-xs mt-0.5" style="color:#93a89b;">點擊預覽</p>
+          </div>
+        </button>
+
+        <button type="button" onclick="openLightbox('slide-template.png','簡報底稿')" class="resource-btn rounded-lg p-5 flex flex-col gap-3 border text-left" style="border-color:#3a5346; background:#173226;">
+          <span class="w-9 h-9 rounded-md flex items-center justify-center" style="background:#2f6ba8;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21h8M3 17h18"/></svg>
+          </span>
+          <div>
+            <p class="text-white font-medium text-sm">簡報底稿</p>
+            <p class="text-xs mt-0.5" style="color:#93a89b;">點擊預覽</p>
+          </div>
+        </button>
+
       </div>
     </div>
   </section>
@@ -357,6 +485,110 @@
   <footer class="max-w-6xl mx-auto px-6 md:px-10 py-8">
     <p class="text-xs" style="color:var(--ink-500);">2026企業ESG雙軸實戰班 · 內部規劃頁面</p>
   </footer>
+
+  <!-- Notes modal -->
+  <div class="modal-overlay" id="noteModal" onclick="if(event.target===this) closeNoteModal()">
+    <div class="modal-box">
+      <header>
+        <span id="noteModalTitle" class="font-semibold text-sm"></span>
+        <button type="button" onclick="closeNoteModal()" aria-label="關閉" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.1rem;line-height:1;">✕</button>
+      </header>
+      <div class="p-4">
+        <textarea id="noteModalTextarea" placeholder="在這裡輸入備註…"></textarea>
+        <div class="mt-3 flex items-center justify-between">
+          <span class="modal-save-status" id="noteModalStatus"></span>
+          <div class="flex gap-2">
+            <button type="button" onclick="closeNoteModal()" class="badge" style="background:var(--sand-100); color:var(--ink-500); border:1px solid #dcd8ca;">關閉</button>
+            <button type="button" onclick="saveNote()" class="badge" style="background:var(--forest-700); color:#fff;">儲存備註</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image lightbox -->
+  <div class="lightbox-overlay" id="lightbox" onclick="if(event.target===this) closeLightbox()">
+    <button type="button" class="lightbox-close" onclick="closeLightbox()" aria-label="關閉">✕</button>
+    <div class="lightbox-inner">
+      <img id="lightboxImg" src="" alt="">
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+  </div>
+
+  <script>
+    function openLightbox(src, caption){
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxImg').alt = caption;
+      document.getElementById('lightboxCaption').textContent = caption;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox(){
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    const cardIds = ['yilan','zhongyang','zhongzheng','donghwa'];
+    let currentNoteCardId = null;
+
+    async function loadCounts(){
+      for (const id of cardIds){
+        try{
+          const res = await window.storage.get('count:'+id);
+          if (res && res.value != null){
+            const el = document.querySelector('.count-badge[data-count-id="'+id+'"] input');
+            if (el) el.value = res.value;
+          }
+        }catch(e){ /* no saved value yet */ }
+      }
+    }
+
+    async function saveCount(id, value){
+      try{
+        await window.storage.set('count:'+id, value);
+      }catch(e){
+        console.error('無法儲存已報名人數', e);
+      }
+    }
+
+    function openNoteModal(id, title){
+      currentNoteCardId = id;
+      document.getElementById('noteModalTitle').textContent = title + ' · 備註';
+      document.getElementById('noteModalStatus').textContent = '';
+      const ta = document.getElementById('noteModalTextarea');
+      ta.value = '載入中…';
+      document.getElementById('noteModal').classList.add('open');
+
+      window.storage.get('note:'+id).then(res => {
+        ta.value = (res && res.value) ? res.value : '';
+      }).catch(() => {
+        ta.value = '';
+      });
+    }
+
+    function closeNoteModal(){
+      document.getElementById('noteModal').classList.remove('open');
+      currentNoteCardId = null;
+    }
+
+    async function saveNote(){
+      if (!currentNoteCardId) return;
+      const ta = document.getElementById('noteModalTextarea');
+      const status = document.getElementById('noteModalStatus');
+      try{
+        await window.storage.set('note:'+currentNoteCardId, ta.value);
+        status.textContent = '已儲存 ✓';
+        setTimeout(() => { if (status.textContent === '已儲存 ✓') status.textContent = ''; }, 2000);
+      }catch(e){
+        status.textContent = '儲存失敗，請再試一次';
+        console.error(e);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape'){ closeNoteModal(); closeLightbox(); }
+    });
+
+    loadCounts();
+  </script>
 
 </body>
 </html>
