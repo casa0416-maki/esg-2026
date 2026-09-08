@@ -169,13 +169,13 @@
             攜手宜蘭、中央、中正、東華四校，結合環境（E）、人權（S）講座、企業實務案例與實作工作坊，協助在地企業與學員建立永續行動力。
           </p>
           <div class="mt-5 flex flex-wrap items-center gap-2">
-            <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--forest-700); color:#fff; text-decoration:none;">報名連結</a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--tech-500); color:#fff; text-decoration:none;">廣宣情形</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeUt6oGMBBP7eBd7igxy9LmqbE7gELUrpevIUZiTJSJohTvWQ/viewform" target="_blank" rel="noopener noreferrer" class="badge" style="background:var(--forest-700); color:#fff; text-decoration:none;">報名連結</a>
+            <button type="button" onclick="openPromoModal()" class="badge" style="background:var(--tech-500); color:#fff; border:none; cursor:pointer;">廣宣情形</button>
           </div>
           <div class="mt-4 flex items-center gap-2 text-sm">
             <span class="inline-block w-2 h-2 rounded-full" style="background:var(--tech-500);"></span>
             <span style="color:var(--ink-500);">最後更新日期：</span>
-            <span class="num font-semibold" style="color:var(--forest-800);">2026/09/07</span>
+            <span class="num font-semibold" style="color:var(--forest-800);">2026/09/04</span>
           </div>
         </div>
 
@@ -208,6 +208,20 @@
       </div>
     </div>
   </header>
+
+  <!-- 注意事項 -->
+  <section class="max-w-6xl mx-auto px-6 md:px-10 pt-10">
+    <div class="card-surface rounded-xl p-6">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <h2 class="text-lg font-bold" style="color:var(--forest-900);">注意事項</h2>
+        <div class="flex items-center gap-3">
+          <span class="modal-save-status" id="noticeStatus"></span>
+          <button type="button" onclick="saveNotice()" class="badge" style="background:var(--forest-700); color:#fff;">儲存</button>
+        </div>
+      </div>
+      <textarea id="noticeTextarea" class="mt-4" placeholder="在這裡輸入注意事項…" style="width:100%; min-height:120px; padding:.9rem; border:1px solid #dcd8ca; border-radius:8px; font-family:inherit; font-size:.9rem; line-height:1.6; color:var(--ink-900); resize:vertical; outline:none;"></textarea>
+    </div>
+  </section>
 
   <!-- Sessions Grid -->
   <main class="max-w-6xl mx-auto px-6 md:px-10 py-12">
@@ -296,11 +310,11 @@
         <dl class="space-y-3 text-sm">
           <div class="flex flex-wrap items-baseline gap-2">
             <span class="badge" style="background:var(--forest-100); color:var(--forest-700);"><span class="badge-dot" style="background:var(--forest-500);"></span>E 環境</span>
-            <span style="color:var(--ink-900);">林孟賢 會計師（安永會計師事務所）</span>
+            <span style="color:var(--ink-900);">曾于哲 會計師（安永會計師事務所）</span>
           </div>
           <div class="flex flex-wrap items-baseline gap-2">
             <span class="badge" style="background:var(--tech-100); color:var(--tech-700);"><span class="badge-dot" style="background:var(--tech-500);"></span>S 人權</span>
-            <span style="color:var(--ink-900);">莊于葶 副總經理（勤業眾信）</span>
+            <span style="color:var(--ink-900);">蔡佳芸 副總經理（PwC 資誠）</span>
           </div>
           <div class="flex flex-wrap items-baseline gap-2">
             <span class="badge" style="background:var(--amber-100); color:var(--amber-600);"><span class="badge-dot" style="background:var(--amber-600);"></span>企業案例</span>
@@ -506,6 +520,27 @@
     </div>
   </div>
 
+  <!-- 廣宣情形 log modal -->
+  <div class="modal-overlay" id="promoModal" onclick="if(event.target===this) closePromoModal()">
+    <div class="modal-box">
+      <header>
+        <span class="font-semibold text-sm">廣宣情形紀錄</span>
+        <button type="button" onclick="closePromoModal()" aria-label="關閉" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.1rem;line-height:1;">✕</button>
+      </header>
+      <div class="p-4">
+        <div id="promoLogList" style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:.6rem; margin-bottom:.9rem;"></div>
+        <textarea id="promoModalTextarea" placeholder="新增一筆廣宣情形紀錄…"></textarea>
+        <div class="mt-3 flex items-center justify-between">
+          <span class="modal-save-status" id="promoModalStatus"></span>
+          <div class="flex gap-2">
+            <button type="button" onclick="closePromoModal()" class="badge" style="background:var(--sand-100); color:var(--ink-500); border:1px solid #dcd8ca;">關閉</button>
+            <button type="button" onclick="savePromoEntry()" class="badge" style="background:var(--forest-700); color:#fff;">新增紀錄</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Image lightbox -->
   <div class="lightbox-overlay" id="lightbox" onclick="if(event.target===this) closeLightbox()">
     <button type="button" class="lightbox-close" onclick="closeLightbox()" aria-label="關閉">✕</button>
@@ -529,39 +564,39 @@
     const cardIds = ['yilan','zhongyang','zhongzheng','donghwa'];
     let currentNoteCardId = null;
 
-    async function loadCounts(){
+    // --- 已報名人數：改用 localStorage，開啟頁面時自動讀回上次輸入的數字 ---
+    function loadCounts(){
       for (const id of cardIds){
         try{
-          const res = await window.storage.get('count:'+id);
-          if (res && res.value != null){
+          const saved = localStorage.getItem('esg_count_'+id);
+          if (saved !== null){
             const el = document.querySelector('.count-badge[data-count-id="'+id+'"] input');
-            if (el) el.value = res.value;
+            if (el) el.value = saved;
           }
-        }catch(e){ /* no saved value yet */ }
+        }catch(e){ console.error('讀取已報名人數失敗', e); }
       }
     }
 
-    async function saveCount(id, value){
+    function saveCount(id, value){
       try{
-        await window.storage.set('count:'+id, value);
+        localStorage.setItem('esg_count_'+id, value);
       }catch(e){
         console.error('無法儲存已報名人數', e);
       }
     }
 
+    // --- 每張卡片的備註 ---
     function openNoteModal(id, title){
       currentNoteCardId = id;
       document.getElementById('noteModalTitle').textContent = title + ' · 備註';
       document.getElementById('noteModalStatus').textContent = '';
       const ta = document.getElementById('noteModalTextarea');
-      ta.value = '載入中…';
-      document.getElementById('noteModal').classList.add('open');
-
-      window.storage.get('note:'+id).then(res => {
-        ta.value = (res && res.value) ? res.value : '';
-      }).catch(() => {
+      try{
+        ta.value = localStorage.getItem('esg_note_'+id) || '';
+      }catch(e){
         ta.value = '';
-      });
+      }
+      document.getElementById('noteModal').classList.add('open');
     }
 
     function closeNoteModal(){
@@ -569,12 +604,95 @@
       currentNoteCardId = null;
     }
 
-    async function saveNote(){
+    function saveNote(){
       if (!currentNoteCardId) return;
       const ta = document.getElementById('noteModalTextarea');
       const status = document.getElementById('noteModalStatus');
       try{
-        await window.storage.set('note:'+currentNoteCardId, ta.value);
+        localStorage.setItem('esg_note_'+currentNoteCardId, ta.value);
+        status.textContent = '已儲存 ✓';
+        setTimeout(() => { if (status.textContent === '已儲存 ✓') status.textContent = ''; }, 2000);
+      }catch(e){
+        status.textContent = '儲存失敗，請再試一次';
+        console.error(e);
+      }
+    }
+
+    // --- 廣宣情形：每次新增都存成一筆帶時間戳記的紀錄 ---
+    function getPromoLog(){
+      try{
+        return JSON.parse(localStorage.getItem('esg_promo_log') || '[]');
+      }catch(e){
+        return [];
+      }
+    }
+
+    function renderPromoLog(){
+      const list = document.getElementById('promoLogList');
+      const entries = getPromoLog();
+      if (entries.length === 0){
+        list.innerHTML = '<p style="color:var(--ink-500); font-size:.82rem;">尚無紀錄。</p>';
+        return;
+      }
+      list.innerHTML = entries.slice().reverse().map(e => (
+        '<div style="border:1px solid #e4dfd1; border-radius:8px; padding:.6rem .8rem; background:#faf8f2;">' +
+          '<p style="font-size:.72rem; color:var(--ink-500); margin-bottom:.25rem;">' + e.date + '</p>' +
+          '<p style="font-size:.85rem; color:var(--ink-900); white-space:pre-wrap;">' + escapeHtml(e.text) + '</p>' +
+        '</div>'
+      )).join('');
+    }
+
+    function escapeHtml(str){
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function openPromoModal(){
+      renderPromoLog();
+      document.getElementById('promoModalTextarea').value = '';
+      document.getElementById('promoModalStatus').textContent = '';
+      document.getElementById('promoModal').classList.add('open');
+    }
+
+    function closePromoModal(){
+      document.getElementById('promoModal').classList.remove('open');
+    }
+
+    function savePromoEntry(){
+      const ta = document.getElementById('promoModalTextarea');
+      const status = document.getElementById('promoModalStatus');
+      const text = ta.value.trim();
+      if (!text){
+        status.textContent = '請先輸入內容';
+        return;
+      }
+      try{
+        const entries = getPromoLog();
+        entries.push({ date: new Date().toLocaleString('zh-TW'), text });
+        localStorage.setItem('esg_promo_log', JSON.stringify(entries));
+        ta.value = '';
+        status.textContent = '已新增 ✓';
+        renderPromoLog();
+        setTimeout(() => { if (status.textContent === '已新增 ✓') status.textContent = ''; }, 2000);
+      }catch(e){
+        status.textContent = '儲存失敗，請再試一次';
+        console.error(e);
+      }
+    }
+
+    // --- 注意事項：單一可編輯欄位 ---
+    function loadNotice(){
+      try{
+        document.getElementById('noticeTextarea').value = localStorage.getItem('esg_notice') || '';
+      }catch(e){ /* ignore */ }
+    }
+
+    function saveNotice(){
+      const ta = document.getElementById('noticeTextarea');
+      const status = document.getElementById('noticeStatus');
+      try{
+        localStorage.setItem('esg_notice', ta.value);
         status.textContent = '已儲存 ✓';
         setTimeout(() => { if (status.textContent === '已儲存 ✓') status.textContent = ''; }, 2000);
       }catch(e){
@@ -584,10 +702,11 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape'){ closeNoteModal(); closeLightbox(); }
+      if (e.key === 'Escape'){ closeNoteModal(); closeLightbox(); closePromoModal(); }
     });
 
     loadCounts();
+    loadNotice();
   </script>
 
 </body>
